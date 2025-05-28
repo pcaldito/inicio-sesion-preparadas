@@ -46,16 +46,22 @@
                 $this->correo = $_POST['correo'];
                 if (!empty($_POST['pw'])) {
                     $this->pw = $_POST['pw'];
-
-                    $objMSesion= new Msesion();
-                    $this->msg=$objMSesion->comprobar_usuario($this->correo,$this->pw);
-                }else{
-                    $this->msg="Falta la contraseña";
+        
+                    $objMSesion = new Msesion();
+                    $respuesta = $objMSesion->comprobar_usuario($this->correo, $this->pw);//develve $respuesta en forma de array 
+        
+                    $this->msg = $respuesta['msg'];
+        
+                    if (isset($respuesta['nombre'])) {
+                        $this->nombreUsuario = $respuesta['nombre']; // Guardar nombre si hay login correcto
+                    }
+                } else {
+                    $this->msg = "Falta la contraseña";
                 }
-            }else{
-                $this->msg="Falta el correo por rellenar";
+            } else {
+                $this->msg = "Falta el correo por rellenar";
             }
-
+        
             return $this->msg;
         }
     }

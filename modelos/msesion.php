@@ -29,31 +29,40 @@
         }
 
         public function comprobar_usuario($correo, $pw) {
+            //preparamos la consulta agregando un ? donde vaya la variable
             $stmt = $this->conexion->prepare("SELECT * FROM usuarios WHERE correo = ?");
+            // parametrizamos la variable e indicamos que valor tendra la ?
             $stmt->bind_param("s", $correo);
+            // ejecutamos la consulta
             $stmt->execute();
-
+            // como es una consulta select devuelve un objeto result
             $resultado = $stmt->get_result();
-
+        
             if ($resultado->num_rows > 0) {
                 $usuario = $resultado->fetch_assoc();
-
+        
                 $hash = $usuario['pw'];
-
+        
                 if (password_verify($pw, $hash)) {
                     $this->msg = "Inicio de sesión correcto";
+                    return [
+                        'msg' => $this->msg, //aqui devuelve mensaje de correcto
+                        'nombre' => $usuario['nombre'] // Aquí se devuelve el nombre
+                    ];
                 } else {
-                    echo ("Correo ingresado: " . $correo);
-                    echo ("<br>Contraseña ingresada: " . $pw);
-                    echo ("<br>Hash almacenado: " . $hash);
+                    //echo $hash;
+                    //echo $pw;
                     $this->msg = "Contraseña incorrecta";
                 }
-                
             } else {
                 $this->msg = "Correo no encontrado";
             }
-
-            return $this->msg;
+        
+            return [
+                'msg' => $this->msg 
+                //aqui llega si el login no es correcto o no existe el correo, lo devulve en forma de array para poder enviar el nombre si fuera correcto
+                
+            ];
         }
     }
 ?>
