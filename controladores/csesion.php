@@ -9,9 +9,8 @@
 
         public function alta_registro() {
             if ($this->validar_form()) {
-            $objMSesion = new Msesion();
-            //echo $this->correo;
-            $this->msg = $objMSesion->alta_registro($this->nombre, $this->correo, $this->pw);
+                $objMSesion = new Msesion();
+                $this->msg = $objMSesion->alta_registro($this->nombre, $this->correo, $this->pw);
             } else {
                 $this->msg = "Error al enviar el formulario";
             }
