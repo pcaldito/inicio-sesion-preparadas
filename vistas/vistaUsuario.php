@@ -6,13 +6,12 @@
 </head>
 <body>
     <h3><?php echo $mensaje; ?></h3>
-
-    <?php 
-        if (!empty($nombreUsuario)){ //si el login es correcto, el $nombreUsuario no estara vacio, si lo esta no se ha iniciado sesion
-            echo '<p>Bienvenido, '.$nombreUsuario.'</p>';
-        }
+    <?php
+        // muestra el nombre del usuario que ha iniciado sesion, solo si el inicio es correcto, sino no existe el array $usuario
+        if(isset($usuario)){
+            echo '<p>Bienvenido, '.$usuario['nombre'].'</p>';
+        }  
     ?>
-
     <p><a href="procesoInicioSesion.php">Volver al inicio de sesion</a></p>
 </body>
 </html>

@@ -41,28 +41,12 @@
             if ($resultado->num_rows > 0) {
                 $usuario = $resultado->fetch_assoc();
         
-                $hash = $usuario['pw'];
-        
-                if (password_verify($pw, $hash)) {
-                    $this->msg = "Inicio de sesión correcto";
-                    return [
-                        'msg' => $this->msg, //aqui devuelve mensaje de correcto
-                        'nombre' => $usuario['nombre'] // Aquí se devuelve el nombre
-                    ];
-                } else {
-                    //echo $hash;
-                    //echo $pw;
-                    $this->msg = "Contraseña incorrecta";
-                }
+                return $usuario;
             } else {
                 $this->msg = "Correo no encontrado";
             }
         
-            return [
-                'msg' => $this->msg 
-                //aqui llega si el login no es correcto o no existe el correo, lo devulve en forma de array para poder enviar el nombre si fuera correcto
-                
-            ];
+            return $this->msg;
         }
     }
 ?>

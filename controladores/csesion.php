@@ -16,7 +16,8 @@
             }
             return $this->msg;
         }
-
+        
+        //este metodo devuelve true si todas los campos estan rellenos de forma correcta y deja avanzar en el alta del registro
         public function validar_form(): bool {
             if (!empty($_POST['nombre'])) {
                 $this->nombre = $_POST['nombre'];
@@ -47,12 +48,18 @@
                     $this->pw = $_POST['pw'];
         
                     $objMSesion = new Msesion();
-                    $respuesta = $objMSesion->comprobar_usuario($this->correo, $this->pw);//develve $respuesta en forma de array 
-        
-                    $this->msg = $respuesta['msg'];
-        
-                    if (isset($respuesta['nombre'])) {
-                        $this->nombreUsuario = $respuesta['nombre']; // Guardar nombre si hay login correcto
+                    //develve $usuario que es la fila de la base de datos del usuario que introduce el correo
+                    $usuario = $objMSesion->comprobar_usuario($this->correo, $this->pw);
+                    
+                    // comprobar que el hash de la base de datos es el mismo que enviamos en el form
+                    if (password_verify($this->pw, $usuario['pw'])) {
+                        $this->msg = "Inicio de sesión correcto";
+                        // devuelvo el array con la fila de la base de datos con correo, nombre y estos datos para ver el nombre en la vista
+                        return $usuario;
+                        
+                    } else {
+                        // si falla el inicio de sesion no devuelve el array $usuario para que no haya errores de falta de variables en la vista
+                        $this->msg = "Contraseña incorrecta";
                     }
                 } else {
                     $this->msg = "Falta la contraseña";
@@ -60,8 +67,6 @@
             } else {
                 $this->msg = "Falta el correo por rellenar";
             }
-        
-            return $this->msg;
         }
     }
         
